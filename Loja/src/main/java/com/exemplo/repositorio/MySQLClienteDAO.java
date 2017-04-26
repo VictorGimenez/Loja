@@ -7,7 +7,6 @@ package com.exemplo.repositorio;
 
 import com.exemplo.conexao.ConnectionFactory;
 import com.exemplo.controller.ClienteDAO;
-import com.exemplo.controller.ClienteDAO;
 import com.exemplo.entity.Cliente;
 import java.util.List;
 import javax.persistence.Query;
@@ -16,7 +15,6 @@ import javax.persistence.Query;
  *
  * @author Vickz
  */
-
 public class MySQLClienteDAO implements ClienteDAO {
 
     public ConnectionFactory cf = null;
@@ -24,8 +22,7 @@ public class MySQLClienteDAO implements ClienteDAO {
     public MySQLClienteDAO(ConnectionFactory cf) {
         this.cf = cf;
     }
-    
-    
+
     @Override
     public void inserir(Cliente o) {
         cf.createEm().getTransaction().begin();
@@ -33,7 +30,6 @@ public class MySQLClienteDAO implements ClienteDAO {
         //em.persist(cliente);
         cf.createEm().merge(o);
         cf.createEm().getTransaction().commit();
-        cf.close();
     }
 
     @Override
@@ -43,7 +39,6 @@ public class MySQLClienteDAO implements ClienteDAO {
         cli.getId();
         cf.createEm().merge(o);
         cf.createEm().getTransaction().commit();
-        cf.close();
     }
 
     @Override
@@ -51,9 +46,7 @@ public class MySQLClienteDAO implements ClienteDAO {
         cf.createEm().getTransaction().begin();
         cf.createEm().remove(o);
         cf.createEm().getTransaction().commit();
-        cf.close();
     }
-
 
     @Override
     public Cliente pesquisar(Long id) {
@@ -71,9 +64,25 @@ public class MySQLClienteDAO implements ClienteDAO {
         Query consulta = cf.createEm().createQuery("select cliente from Cliente cliente");
         List<Cliente> clientes = consulta.getResultList();
         cf.createEm().getTransaction().commit();
-        cf.close();
         return clientes;
     }
 
+    public void inserirLista(Cliente o) {
+        Boolean check = cf.createEm().createQuery("select 1 from Cliente cliente").setMaxResults(1).getResultList().isEmpty();
+        if(check == true){
+        cf.createEm().getTransaction().begin();
+            for (int i = 0; i < 10; i++) {
+                cf.createEm().merge(o);
+                if (i % 20 == 0) {
+                    cf.createEm().flush();
+                    cf.createEm().clear();
+                }
+            }
+            cf.createEm().getTransaction().commit();
+            cf.close();
+        } else {
+            System.out.println("Tabela ja preenchida");
+        }
+    }
 
 }

@@ -8,12 +8,9 @@ package com.exemplo.repositorio;
 import com.exemplo.conexao.ConnectionFactory;
 import com.exemplo.entity.Pedido;
 import java.util.List;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import com.exemplo.controller.PedidoDAO;
-import com.exemplo.controller.PedidoDAO;
 import java.util.Date;
-import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
 
 /**
@@ -47,7 +44,6 @@ public class MySQLPedidoDAO implements PedidoDAO {
         pedido.getId();
         cf.createEm().merge(o);
         cf.createEm().getTransaction().commit();
-        cf.close();
     }
 
     @Override
@@ -55,7 +51,6 @@ public class MySQLPedidoDAO implements PedidoDAO {
         cf.createEm().getTransaction().begin();
         cf.createEm().remove(o);
         cf.createEm().getTransaction().commit();
-        cf.close();
     }
 
     @Override
@@ -77,17 +72,7 @@ public class MySQLPedidoDAO implements PedidoDAO {
         Query consulta = cf.createEm().createQuery("select pedido from Pedido pedido");
         List<Pedido> pedidos = consulta.getResultList();
         cf.createEm().getTransaction().commit();
-        cf.close();
         return pedidos;
-    }
-
-    @Override
-    public Pedido pesquisarPorData(Long id, Date dataCadastro) {
-       TypedQuery<Pedido> query = cf.createEm().createQuery("id = :id and registerDate = :date", Pedido.class);
-       query.setParameter("id", id);
-       query.setParameter("date", dataCadastro);
-       Pedido pedido = (Pedido) query.getResultList();
-       return pedido;
     }
 
     public List<String> getNumControle(){
@@ -96,7 +81,6 @@ public class MySQLPedidoDAO implements PedidoDAO {
        Query consulta = cf.createEm().createQuery("select numControle from Pedido p");
        List <String> pedidos = consulta.getResultList();
        cf.createEm().getTransaction().commit();
-       cf.close();
        return pedidos;
     }
     
@@ -115,6 +99,16 @@ public class MySQLPedidoDAO implements PedidoDAO {
        Long cont = (Long) q.getSingleResult();
        cf.createEm().getTransaction().commit();
        return cont;
+    }
+    
+    @Override
+    public Long gerarProximaId(){
+        cf.createEm().getTransaction().begin();
+        Query q = cf.createEm().createQuery("select count(*) from Pedido");
+        Long id = (Long) q.getSingleResult();
+        id = id + 1;
+        cf.createEm().getTransaction().commit();
+        return id;
     }
     
     

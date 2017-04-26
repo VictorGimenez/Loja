@@ -1,6 +1,8 @@
 package com.exemplo.entity;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,7 +50,7 @@ public class Pedido implements Serializable {
     
     @XmlElement(name="codCliente")
     @Column
-    private Integer codCliente;
+    private int codCliente;
     
     @XmlElement(name="valorTotal")
     @Column(precision=15, scale=7)
@@ -81,7 +83,7 @@ public class Pedido implements Serializable {
     public Long getId() {
         return id;
     }
-
+    
     /**
      * @param id the id to set
      */
@@ -176,14 +178,14 @@ public class Pedido implements Serializable {
     /**
      * @return the codCliente
      */
-    public Integer getCodCliente() {
+    public int getCodCliente() {
         return codCliente;
     }
 
     /**
      * @param codCliente the codCliente to set
      */
-    public void setCodCliente(Integer codCliente) {
+    public void setCodCliente(int codCliente) {
         this.codCliente = codCliente;
     }
     
@@ -193,7 +195,7 @@ public class Pedido implements Serializable {
     public String toString() {
         return "Pedido \n" + "\nid=" + id + "\n dataCadastro=" + dataCadastro + "\n nomeProduto=" + nomeProduto + "\n numControle=" + numControle + "\n quantidade=" + quantidade + "\n valorUnitario=" + valorUnitario + "\n codCliente=" + codCliente + "\n valorTotal=" + valorTotal + "\n total=" + getTotal() + '\n';
     }
-
+    
     /**
      * @return the total
      */
@@ -205,8 +207,6 @@ public class Pedido implements Serializable {
     public void setTotal(Double total) {
         this.total = total;
     }
-
-    
          
     
 }

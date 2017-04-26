@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
-<!-- Formulário para a inserção de pedidos no sistema, para inserir data de cadastro
-favor inserir no formato "yyyy-MM-dd" (ano-mês-dia) para a leitura do arquivo -->
 <pedido>
-<dataCadastro>2017-04-12</dataCadastro>
-<nomeProduto>Produto C</nomeProduto>
-<numControle>45351</numControle>
-<quantidade>4</quantidade>
-<valorUnitario>41.46</valorUnitario>
-<codCliente>6</codCliente>
+<dataCadastro>2017-04-26</dataCadastro>
+<nomeProduto>Produto G</nomeProduto>
+<numControle>21511</numControle>
+<quantidade>6</quantidade>
+<valorUnitario>32.90</valorUnitario>
+<codCliente>4</codCliente>
 </pedido>

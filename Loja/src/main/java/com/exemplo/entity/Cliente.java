@@ -45,44 +45,47 @@ public class Cliente implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Long id;
+    private int id;
     @Column(name = "codCliente")
-    private Integer codCliente;
-
+    private int codCliente;
+            
     public Cliente() {
     }
 
-    public Cliente(Long id) {
+    public Cliente(int id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        Long oldId = this.id;
+    public void setId(int id) {
+        int oldId = this.id;
         this.id = id;
         changeSupport.firePropertyChange("id", oldId, id);
     }
 
-    
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 5;
+        hash = 73 * hash + this.id;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Cliente)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Cliente other = (Cliente) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cliente other = (Cliente) obj;
+        if (this.id != other.id) {
             return false;
         }
         return true;
@@ -104,14 +107,14 @@ public class Cliente implements Serializable {
     /**
      * @return the codCliente
      */
-    public Integer getCodCliente() {
+    public int getCodCliente() {
         return codCliente;
     }
 
     /**
      * @param codCliente the codCliente to set
      */
-    public void setCodCliente(Integer codCliente) {
+    public void setCodCliente(int codCliente) {
         this.codCliente = codCliente;
     }
 

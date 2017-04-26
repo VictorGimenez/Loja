@@ -16,8 +16,8 @@ import java.util.List;
  */
 public interface PedidoDAO extends DAO <Pedido, Long> {
     
-    public Pedido pesquisarPorData(Long id, Date dataCadastro);
     public Double retornaSoma();
     public List<String> getNumControle();
+    public Long gerarProximaId();
     
 }

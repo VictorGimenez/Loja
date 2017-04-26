@@ -5,15 +5,14 @@
  */
 package com.exemplo.view;
 
-
 import com.exemplo.conexao.ConnectionFactory;
 import com.exemplo.exception.DAOException;
 import com.exemplo.dao.DAOManager;
 import com.exemplo.file.FiltroArquivo;
 import com.exemplo.entity.Cliente;
 import com.exemplo.entity.Pedido;
-import com.exemplo.entity.Produto;
 import com.exemplo.repositorio.MySQLPedidoDAO;
+import com.exemplo.repositorio.MySQLClienteDAO;
 import com.exemplo.model.PedidoModel;
 import java.io.File;
 import java.text.DateFormat;
@@ -43,7 +42,6 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
     private String xmlFile = "";
     private boolean editavel;
 
-
     /**
      * @return the ped
      */
@@ -70,7 +68,6 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         atualizarTabela(manager);
         habilitarTextFieldEBotoes();
         List<Cliente> clientes = new ArrayList<Cliente>();
-        List<Produto> produtos = new ArrayList<Produto>();
         clientes = manager.getClienteDAO().listar();
         cbCodCliente.setModel(new DefaultComboBoxModel(clientes.toArray()));
         desabilitarTextFieldEBotoes();
@@ -90,15 +87,11 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-        entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("victor").createEntityManager();
-        produtoQuery = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT p FROM Produto p");
-        produtoList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : produtoQuery.getResultList();
         entityManager0 = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("victor").createEntityManager();
         clienteQuery = java.beans.Beans.isDesignTime() ? null : entityManager0.createQuery("SELECT c FROM Cliente c");
         clienteList = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : clienteQuery.getResultList();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        tfPedido = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         tfValor = new javax.swing.JTextField();
@@ -107,18 +100,19 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        tfNumControle = new javax.swing.JTextField();
-        tfDataCad = new javax.swing.JFormattedTextField();
         cbCodCliente = new javax.swing.JComboBox<>();
         tfProduto = new javax.swing.JTextField();
+        tfNumControle = new javax.swing.JTextField();
+        tfDataCad = new javax.swing.JFormattedTextField();
+        tfPedido = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
+        btProcurar = new javax.swing.JButton();
+        btImportar = new javax.swing.JButton();
         btInserir = new javax.swing.JButton();
         btExcluir = new javax.swing.JButton();
-        btImportar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
-        btProcurar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         tfTotal = new javax.swing.JFormattedTextField();
@@ -142,26 +136,12 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
 
         jLabel10.setText("Número de Controle:");
 
-        tfNumControle.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                tfNumControleFocusLost(evt);
-            }
-        });
-        tfNumControle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfNumControleActionPerformed(evt);
-            }
-        });
-
-        tfDataCad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
-        tfDataCad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tfDataCadActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, clienteList, cbCodCliente);
         bindingGroup.addBinding(jComboBoxBinding);
+
+        tfDataCad.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+
+        tfPedido.setEditable(false);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -173,33 +153,38 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tfProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(40, 40, 40)
-                                .addComponent(jLabel3))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfNumControle, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tfPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel9)))
+                                .addComponent(jLabel9))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tfNumControle))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(tfProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addComponent(jLabel3))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                        .addGap(48, 48, 48)
+                                        .addComponent(jLabel4)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(tfDataCad, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(spQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tfValor, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(tfValor, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(tfDataCad)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbCodCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,9 +215,9 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(tfNumControle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(spQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfNumControle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
@@ -261,6 +246,20 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        btProcurar.setText("Abrir XML");
+        btProcurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btProcurarActionPerformed(evt);
+            }
+        });
+
+        btImportar.setText("Importar XML");
+        btImportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btImportarActionPerformed(evt);
+            }
+        });
+
         btInserir.setText("Submeter Campos");
         btInserir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -273,17 +272,10 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
             }
         });
 
-        btExcluir.setText("Remover Pedido");
+        btExcluir.setText("Excluir Pedido");
         btExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btExcluirActionPerformed(evt);
-            }
-        });
-
-        btImportar.setText("Importar XML");
-        btImportar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btImportarActionPerformed(evt);
             }
         });
 
@@ -294,41 +286,34 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
             }
         });
 
-        btProcurar.setText("Abrir XML");
-        btProcurar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btProcurarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(btProcurar)
-                .addGap(33, 33, 33)
-                .addComponent(btImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btExcluir)
-                .addGap(29, 29, 29)
+                .addGap(16, 16, 16)
+                .addComponent(btProcurar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btImportar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btInserir)
-                .addGap(29, 29, 29)
-                .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
+                .addGap(18, 18, 18)
+                .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btExcluir)
-                    .addComponent(btInserir)
-                    .addComponent(btCancelar)
+                    .addComponent(btProcurar)
                     .addComponent(btImportar)
-                    .addComponent(btProcurar, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                    .addComponent(btInserir)
+                    .addComponent(btExcluir)
+                    .addComponent(btCancelar))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -336,7 +321,7 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         jLabel6.setText("Valor Total do Pedido:");
 
         tfTotal.setEditable(false);
-        tfTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        tfTotal.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -385,75 +370,12 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    private void btInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btInserirActionPerformed
-        ConnectionFactory cf = new ConnectionFactory();
-        MySQLPedidoDAO mspdao = new MySQLPedidoDAO(cf);
-        Pedido ped = new Pedido();  
-        Long cont = mspdao.getPedidos();
-        Long limite = 10L;
 
-        
-        if (tfDataCad.getText().length() == 0 && tfNumControle.getText().length() == 0 && tfValor.getText().length() == 0) {
-            JOptionPane.showMessageDialog(rootPane, "Favor Preencher Os Campos", "Inserção Não Efetuada", JOptionPane.INFORMATION_MESSAGE);
-        } else if (ped.getId() == null) {
-            if (Objects.equals(cont, limite)) {
-                JOptionPane.showMessageDialog(rootPane, "Limite de registros excedido", "Cadastro de Pedidos", JOptionPane.INFORMATION_MESSAGE);
-                limparCampos();
-            } else {
-                inserirDados(ped);
-                mspdao.inserir(ped);
-                JOptionPane.showMessageDialog(rootPane, "Pedido Cadastrado com Sucesso", "Cadastro de Pedidos", JOptionPane.INFORMATION_MESSAGE);
-                btImportarActionPerformed(evt);
-                desabilitarTextFieldEBotoes();
-                limparCampos();
-                try {
-                    atualizarTabela(manager);
-                    tfTotal.setText(String.valueOf(ped.getTotal()));
-                } catch (DAOException ex) {
-                    Logger.getLogger(ViewPedidos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        } 
-    }//GEN-LAST:event_btInserirActionPerformed
-
-    
-    private void btImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImportarActionPerformed
-        try {
-            habilitarTextFieldEBotoes();
-            JAXBContext context = JAXBContext.newInstance(Pedido.class);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            Pedido pedido = (Pedido) unmarshaller.unmarshal(new File(xmlFile));
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            
-            Date dataCadastro = pedido.getDataCadastro();
-            String s = df.format(dataCadastro);
-            String nomeProduto = pedido.getNomeProduto();
-            int numControle = pedido.getNumControle();
-            int quantidade = pedido.getQuantidade();
-            float valorUnitario = pedido.getValorUnitario();
-            tfNumControle.setText(String.valueOf(numControle));
-            spQuantidade.setValue(quantidade);
-            tfValor.setText(String.valueOf(valorUnitario));
-            tfDataCad.setText(String.valueOf(s));
-            tfProduto.setText(String.valueOf(nomeProduto));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao importar xml", "", JOptionPane.ERROR_MESSAGE);
-        }
-    }//GEN-LAST:event_btImportarActionPerformed
-
-    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        limparCampos();
-        desabilitarTextFieldEBotoes();
-    }//GEN-LAST:event_btCancelarActionPerformed
-
-    
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         int index = table.getSelectedRow();
         PedidoModel pm = (PedidoModel) table.getModel();
         habilitarRemoverESubmeter();
-        
+
         String id = pm.getValueAt(index, 0).toString();
         String dataCadastro = pm.getValueAt(index, 1).toString();
         String nomeProduto = pm.getValueAt(index, 2).toString();
@@ -461,70 +383,29 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         String quantidade = pm.getValueAt(index, 4).toString();
         String valorUnitario = pm.getValueAt(index, 5).toString();
         String codCliente = pm.getValueAt(index, 6).toString();
-        
-        
+
         Object q = Integer.parseInt(quantidade);
-        
-        
-        if(pm.getValueAt(index, 0) == null ){
+
+        if (pm.getValueAt(index, 0) == null) {
             tfPedido.setText("");
-        } else 
-        if(pm.getValueAt(index, 1) == null){
+        } else if (pm.getValueAt(index, 1) == null) {
             tfDataCad.setText("");
-        } else
-        if(pm.getValueAt(index, 3) == null){
+        } else if (pm.getValueAt(index, 3) == null) {
             tfNumControle.setText("");
-        } else 
-        if(pm.getValueAt(index, 4) == null){
+        } else if (pm.getValueAt(index, 4) == null) {
             spQuantidade.setValue(0);
-        } else 
-        if(pm.getValueAt(index, 5) == null){
+        } else if (pm.getValueAt(index, 5) == null) {
             tfValor.setText("");
-        } else {   
-        tfPedido.setText(id);
-        tfDataCad.setText(dataCadastro);
-        tfProduto.setText(nomeProduto);
-        tfNumControle.setText(numControle);
-        spQuantidade.setValue(q);
-        tfValor.setText(valorUnitario);
-        cbCodCliente.setSelectedItem(codCliente);
+        } else {
+            tfPedido.setText(id);
+            tfDataCad.setText(dataCadastro);
+            tfProduto.setText(nomeProduto);
+            tfNumControle.setText(numControle);
+            spQuantidade.setValue(q);
+            tfValor.setText(valorUnitario);
+            cbCodCliente.setSelectedItem(codCliente);
         }
     }//GEN-LAST:event_tableMouseClicked
-
-    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
-        ConnectionFactory cf = new ConnectionFactory();
-        MySQLPedidoDAO mspdao = new MySQLPedidoDAO(cf);
-        Pedido ped = null;
-        
-        if(JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja excluir?", "Excluir", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-            if(tfPedido.getText().equals("")){
-                JOptionPane.showMessageDialog(rootPane, "Campo vazio, é necessário fazer a pesquisa", "Excluir", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                try {
-                    ped = mspdao.pesquisar(Long.parseLong(tfPedido.getText()));
-                    mspdao.excluir(ped);
-                    JOptionPane.showMessageDialog(rootPane, "Pedido excluido com sucesso", "Excluir", JOptionPane.INFORMATION_MESSAGE);
-                    atualizarTabela(manager);
-                    limparCampos();
-                    tfTotal.setText(String.valueOf(ped.getTotal()));
-                } catch (DAOException ex) {
-                    Logger.getLogger(ViewPedidos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-    }//GEN-LAST:event_btExcluirActionPerformed
-
-    private void tfDataCadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfDataCadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tfDataCadActionPerformed
-
-    private void tfNumControleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfNumControleActionPerformed
-
-    }//GEN-LAST:event_tfNumControleActionPerformed
-
-    private void tfNumControleFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfNumControleFocusLost
-        
-    }//GEN-LAST:event_tfNumControleFocusLost
 
     private void btProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btProcurarActionPerformed
         try {
@@ -532,7 +413,7 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
             jFileChooser.setDialogTitle("Abrir xml");
             jFileChooser.setFileFilter(new FiltroArquivo(".xml", "Arquivo XML"));
             int result = jFileChooser.showSaveDialog(this);
-            if(result == JFileChooser.APPROVE_OPTION){
+            if (result == JFileChooser.APPROVE_OPTION) {
                 xmlFile = jFileChooser.getSelectedFile().getAbsolutePath();
             }
             botoesAtivados();
@@ -541,77 +422,164 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btProcurarActionPerformed
 
+    private void btImportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImportarActionPerformed
+        try {
+            habilitarTextFieldEBotoes();
+            JAXBContext context = JAXBContext.newInstance(Pedido.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            Pedido pedido = (Pedido) unmarshaller.unmarshal(new File(xmlFile));
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+            Date dataCadastro = pedido.getDataCadastro();
+            String s = df.format(dataCadastro);
+            String nomeProduto = pedido.getNomeProduto();
+            int numControle = pedido.getNumControle();
+            int quantidade = pedido.getQuantidade();
+            float valorUnitario = pedido.getValorUnitario();
+
+            tfNumControle.setText(String.valueOf(numControle));
+            spQuantidade.setValue(quantidade);
+            tfValor.setText(String.valueOf(valorUnitario));
+            tfDataCad.setText(String.valueOf(s));
+            tfProduto.setText(String.valueOf(nomeProduto));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Não foi possível importar o arquivo", "Falha ao importar", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_btImportarActionPerformed
+
+    private void btInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btInserirActionPerformed
+        ConnectionFactory cf = new ConnectionFactory();
+        MySQLPedidoDAO mspdao = new MySQLPedidoDAO(cf);
+        Pedido ped = new Pedido();
+        Long cont = mspdao.getPedidos();
+        Long limite = 10L;
+
+        if (tfDataCad.getText().length() == 0 && tfNumControle.getText().length() == 0 && tfValor.getText().length() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Favor Preencher Os Campos", "Inserção Não Efetuada", JOptionPane.INFORMATION_MESSAGE);
+        } else if (ped.getId() == null) {
+            if (Objects.equals(cont, limite)) {
+                JOptionPane.showMessageDialog(rootPane, "Limite de registros excedido", "Cadastro de Pedidos", JOptionPane.INFORMATION_MESSAGE);
+                limparCampos();
+            } else {
+                try {
+                    inserirDados(ped);
+                    mspdao.inserir(ped);
+                    JOptionPane.showMessageDialog(rootPane, "Pedido Cadastrado com Sucesso", "Cadastro de Pedidos", JOptionPane.INFORMATION_MESSAGE);
+                    btImportarActionPerformed(evt);
+                    desabilitarTextFieldEBotoes();
+                    atualizarTabela(manager);
+                    limparCampos();
+                } catch (DAOException ex) {
+                    Logger.getLogger(ViewPedidos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btInserirActionPerformed
+
     private void btInserirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btInserirMouseEntered
         ConnectionFactory cf = new ConnectionFactory();
         mspdao = new MySQLPedidoDAO(cf);
         List<String> pedido = mspdao.getNumControle();
-        
+
         for (int i = 0; i < pedido.size(); i++) {
             String valor = String.valueOf(pedido.get(i));
-            if(valor.equals(tfNumControle.getText().trim())){
-               JOptionPane.showMessageDialog(rootPane, "Numero de Controle já cadastrado", "Consultar Pedidos", JOptionPane.INFORMATION_MESSAGE);
-               tfNumControle.requestFocus();
+            if (valor.equals(tfNumControle.getText().trim())) {
+                JOptionPane.showMessageDialog(rootPane, "Numero de Controle já cadastrado", "Consultar Pedidos", JOptionPane.INFORMATION_MESSAGE);
+                tfNumControle.requestFocus();
             }
         }
     }//GEN-LAST:event_btInserirMouseEntered
 
-    
-    public void atualizarTabela(DAOManager manager) throws DAOException{
+    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        limparCampos();
+        desabilitarTextFieldEBotoes();
+    }//GEN-LAST:event_btCancelarActionPerformed
+
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        ConnectionFactory cf = new ConnectionFactory();
+        MySQLPedidoDAO mspdao = new MySQLPedidoDAO(cf);
+        Pedido ped = null;
+
+        if (JOptionPane.showConfirmDialog(rootPane, "Tem certeza que deseja excluir?", "Excluir", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (tfPedido.getText().equals("")) {
+                JOptionPane.showMessageDialog(rootPane, "Campo vazio, é necessário fazer a pesquisa", "Excluir", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                try {
+                    ped = mspdao.pesquisar(Long.parseLong(tfPedido.getText()));
+                    mspdao.excluir(ped);
+                    JOptionPane.showMessageDialog(rootPane, "Pedido excluido com sucesso", "Excluir", JOptionPane.INFORMATION_MESSAGE);
+                    atualizarTabela(manager);
+                    limparCampos();
+                } catch (DAOException ex) {
+                    Logger.getLogger(ViewPedidos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_btExcluirActionPerformed
+
+    public void atualizarTabela(DAOManager manager) throws DAOException {
+        ConnectionFactory cf = new ConnectionFactory();
+        MySQLPedidoDAO mspdao = new MySQLPedidoDAO(cf);
+        Long ped = mspdao.gerarProximaId();
+        tfPedido.setText(String.valueOf(ped));
+        Double soma = mspdao.retornaSoma();
+        tfTotal.setText(String.valueOf(soma));
+        isFormularioInicializado();
         this.manager = manager;
         this.model = new PedidoModel(manager.getPedidoDAO());
         this.model.atualizarModel();
         this.table.setModel(model);
     }
-    
-    
+
     public void inserirDados(Pedido ped) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         ConnectionFactory cf = new ConnectionFactory();
         mspdao = new MySQLPedidoDAO(cf);
         System.out.println(dateFormat.format(date));
- 
-        
-        if(tfDataCad.getText().length() == 0){
-        ped.setDataCadastro(date);        
+
+        if (tfDataCad.getText().length() == 0) {
+            ped.setDataCadastro(date);
         } else {
-        ped.setDataCadastro(new java.sql.Date(((java.util.Date) tfDataCad.getValue()).getTime()));
+            //linha que está dando erro
+            ped.setDataCadastro(new java.sql.Date(((java.util.Date) tfDataCad.getValue()).getTime()));
         }
-        
-        ped.setNomeProduto(tfProduto.getText()); 
+
+        ped.setNomeProduto(tfProduto.getText());
 
         ped.setValorUnitario(Float.parseFloat(tfValor.getText()));
-         
+
         ped.setNumControle(Integer.parseInt(tfNumControle.getText()));
-        
-        if(spQuantidade.getValue().equals(0)){
+
+        if (spQuantidade.getValue().equals(0)) {
             ped.setQuantidade(1);
         } else {
             ped.setQuantidade((int) spQuantidade.getValue());
         }
- 
+
         // Descontos
         int quantidade = ped.getQuantidade();
         float valorUnitario = ped.getValorUnitario();
         float valorTotal = quantidade * valorUnitario;
         float valorComDesconto = (float) (valorTotal * 0.95);
         float valorComDesconto1 = (float) (valorTotal * 0.9);
- 
-        if( ((Number)spQuantidade.getValue()).intValue() > 5 && ((Number)spQuantidade.getValue()).intValue() < 10) {
+
+        if (((Number) spQuantidade.getValue()).intValue() > 5 && ((Number) spQuantidade.getValue()).intValue() < 10) {
             ped.setValorTotal(valorComDesconto);
-        } else if( ((Number)spQuantidade.getValue()).intValue() > 10 ){
+        } else if (((Number) spQuantidade.getValue()).intValue() > 10) {
             ped.setValorTotal(valorComDesconto1);
         } else {
             ped.setValorTotal(valorTotal);
         }
         Integer cb = Integer.parseInt(cbCodCliente.getSelectedItem().toString());
         ped.setCodCliente(cb);
+
         Double soma = mspdao.retornaSoma();
         ped.setTotal(soma);
-       
-   
+
     }
-        
+
     public void limparCampos() {
         tfProduto.setText("");
         tfDataCad.setText("");
@@ -625,8 +593,8 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         btExcluir.setEnabled(false);
         btCancelar.setEnabled(false);
     }
-    
-    public void habilitarRemoverESubmeter(){
+
+    public void habilitarRemoverESubmeter() {
         btCancelar.setEnabled(true);
         btExcluir.setEnabled(true);
         btImportar.setEnabled(true);
@@ -681,8 +649,27 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
         spQuantidade.setEnabled(false);
     }
 
-       
-    
+    private void botoesAtivados() {
+        btCancelar.setEnabled(true);
+    }
+
+    private void isFormularioInicializado() throws DAOException {
+        ConnectionFactory cf = new ConnectionFactory();
+        MySQLClienteDAO mscdao = new MySQLClienteDAO(cf);
+        Cliente cli = new Cliente();
+        cli.setCodCliente(1);
+        cli.setCodCliente(2);
+        cli.setCodCliente(3);
+        cli.setCodCliente(4);
+        cli.setCodCliente(5);
+        cli.setCodCliente(6);
+        cli.setCodCliente(7);
+        cli.setCodCliente(8);
+        cli.setCodCliente(9);
+        cli.setCodCliente(10);
+        mscdao.inserirLista(cli);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btExcluir;
@@ -692,7 +679,6 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> cbCodCliente;
     private java.util.List<com.exemplo.entity.Cliente> clienteList;
     private javax.persistence.Query clienteQuery;
-    private javax.persistence.EntityManager entityManager;
     private javax.persistence.EntityManager entityManager0;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -706,8 +692,6 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
-    private java.util.List<com.exemplo.entity.Produto> produtoList;
-    private javax.persistence.Query produtoQuery;
     private javax.swing.JSpinner spQuantidade;
     private javax.swing.JTable table;
     private javax.swing.JFormattedTextField tfDataCad;
@@ -718,10 +702,5 @@ public class ViewPedidos extends javax.swing.JInternalFrame {
     private javax.swing.JTextField tfValor;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-
-    private void botoesAtivados() {
-        btCancelar.setEnabled(true);
-    }
-
 
 }
